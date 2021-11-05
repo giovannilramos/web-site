@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\Categorias;
-use App\Models\Carrinho;
-use App\Models\Produtos;
-use App\Models\Pedidos;
-use App\Models\PedidoProdutos;
 use App\Models\CupomDesconto;
+use App\Models\PedidoProdutos;
+use App\Models\Pedidos;
+use App\Models\Produtos;
 
 class CarrinhoController extends Controller
 {
@@ -40,12 +37,12 @@ class CarrinhoController extends Controller
         if (empty($produto->id)) {
             return redirect('/produtos')->with('msg','Produto não encontrado!');
         }
-        
+
         $idPedido = Pedidos::consultaId([
             'user_id'=>$user->id,
             'status'=>'RE'
         ]);
-        
+
         if (empty($idPedido)) {
             $pedido_novo = Pedidos::create([
                 'user_id'=>$user->id,
@@ -90,7 +87,7 @@ class CarrinhoController extends Controller
         if ($remove_apenas_item) {
             $where_produto['id']= $produto->id;
         }
-        
+
         PedidoProdutos::where($where_produto)->delete();
 
         $check_pedido = PedidoProdutos::where([
@@ -104,12 +101,12 @@ class CarrinhoController extends Controller
         }
         return redirect('/carrinho')->with('msg','Produto removido com sucesso');
     }
-    
+
     public function concluir() {
         $req = Request();
         $idPedido = $req->input('pedidos_id');
         $user = auth()->user();
-        
+
         $check_pedido = Pedidos::where([
             'id'=>$idPedido,
             'user_id'=>$user->id,
@@ -119,7 +116,7 @@ class CarrinhoController extends Controller
         if (!$check_pedido) {
             return redirect('/carrinho')->with('msg','Pedido não encontratdo!');
         }
-        
+
         $check_produtos = PedidoProdutos::where([
             'pedidos_id'=>$idPedido
         ])->exists();
@@ -141,7 +138,7 @@ class CarrinhoController extends Controller
 
         return redirect('/carrinho/compras')->with('msg','Compra concluída com sucesso! Obrigado por comprar com a QuazTec!');
     }
-    
+
     public function compras() {
         $user = auth()->user();
         $categorias = Categorias::all();
@@ -261,7 +258,7 @@ class CarrinhoController extends Controller
                 case 'porc':
                     $valor_desconto = ($pedido_produto->valor*$cupom->desconto)/100;
                     break;
-                
+
                 default:
                     $valor_desconto = $cupom->desconto;
                     break;
@@ -269,7 +266,7 @@ class CarrinhoController extends Controller
 
             $valor_desconto = ($valor_desconto > $pedido_produto->valor) ? $pedido_produto->valor
              : number_format($valor_desconto, 2);
-        
+
             switch ($cupom->modo_limite) {
                 case 'qtd':
                     $qtd_pedido = PedidoProdutos::whereIn('status', ['PA','RE'])->where([
@@ -281,7 +278,7 @@ class CarrinhoController extends Controller
                     }
 
                     break;
-                
+
                 default:
                     $valor_ckc_descontos =  PedidoProdutos::whereIn('status',['PA','RE'])->where([
                         'cupom_descontos_id'=>$cupom->id
@@ -305,7 +302,6 @@ class CarrinhoController extends Controller
         } else {
             return redirect('/carrinho')->with('msg','Cupom esgotado!');
         }
-        return redirect('/carrinho');
     }
 
     public function confirmar() {

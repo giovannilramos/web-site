@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categorias;
 use App\Models\Produtos;
 use PagSeguro\Configuration\Configure;
+use PagSeguro\Services\Session;
 
 class ProdutosController extends Controller
 {
@@ -29,7 +29,6 @@ class ProdutosController extends Controller
             //Vai fazer a busca pela url pela string passada
             $busca = request('search');
 
-            $produtos = Produtos::paginate(6);
 
             $categorias = Categorias::all();
 
@@ -37,15 +36,15 @@ class ProdutosController extends Controller
                 $produtos= Produtos::where([
                     ['nome', 'like', '%'.$busca.'%']
                 ])->paginate(6);
-            }else {
-                $produtos;
+            } else {
+                $produtos = Produtos::paginate(6);
             }
 
             return view('produtos',[
                 'busca'=>$busca,
                 'produtos'=>$produtos,
                 'categorias'=>$categorias
-                
+
             ]);
     }
 
@@ -80,10 +79,10 @@ class ProdutosController extends Controller
         return $this->_configs->getAccountCredencials();
     }
 
-    public function pagar(Resquest $request) {
+    public function pagar() {
         $data = [];
 
-        $sessionCode = \PagSeguro\Services\Session::create(
+        $sessionCode = Session::create(
             $this->getCredential()
         );
         $IDSession = $sessionCode->getResult();

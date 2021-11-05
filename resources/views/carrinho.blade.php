@@ -20,7 +20,7 @@
         @endphp
         @foreach($pedidos->pedido_produtos as $pedidoProd)
         <tr>
-            <td class="align-middle text-center"><img class="imgCarrinho" src="/img/{{$pedidoProd->produto->url}}"></td>
+            <td class="align-middle text-center"><img class="imgCarrinho" alt="Carrinho" src="/img/{{$pedidoProd->produto->url}}"></td>
             <td class="align-middle text-center">{{$pedidoProd->produto->nome}}</td>
             <td class="align-middle text-center">
                 <div class="center-align mb-2">
@@ -46,13 +46,13 @@
         @endforeach
         <tr class="table-dark">
             <td>
-                
+
             </td>
             <td colspan='3'></td>
             <td class="text-center">Total: R$ {{number_format($total_pedido,2,',','.')}} </td>
         </tr>
 
-    </tbody>	
+    </tbody>
 </table>
 <form style="display:inline-flex" class="p-2" action="/carrinho/desconto" method="POST">
     @csrf
@@ -63,7 +63,7 @@
     <div class="d-flex float-end">
         <div class="p-2">
             <a style="font-family: arial" href="/produtos" class="btn btn-primary">Voltar aos produtos</a>
-        </div>    
+        </div>
         <div class="p-2">
             <button type="submit" onclick="redirecionar('/carrinho/confirmar');" class="btn btn-success">Confirmar Compra</button>
         </div>

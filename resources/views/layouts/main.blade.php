@@ -6,8 +6,8 @@
         {{-- Icon title --}}
         <link rel="shortcut icon" href="/img/Logo oficial.png" />
         <title>@yield('title')</title>
-        
-        
+
+
 
         {{-- Links bootstrap --}}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -15,15 +15,11 @@
 
         {{-- link nossa aplicação --}}
         <link rel="stylesheet" href="/css/style.css">
-        
+
     </head>
-    <body> 
+    <body>
         @php
-            if(isset($total_pedido)){
-                $total_pedido =$total_pedido;
-            }else{
-                $total_pedido = 0;
-            }
+            $total_pedido=$total_pedido ?? 0;
         @endphp
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -65,13 +61,13 @@
                     <div class="menuLogin">
                         @auth
                             <a href="{{ url('/dashboard') }}" style="color:black; display: inline-flex;" class="nav-link text-sm underline">Meu Perfil</a>
-                            <form action="/logout" method="POST" class="nav-link" style=" display: inline-flex;"> 
+                            <form action="/logout" method="POST" class="nav-link" style=" display: inline-flex;">
                                 @csrf
                                 <a href="/logout" onclick="event.preventDefault(); this.closest('form').submit();"
                                 class="menuMargin text-sm underline">Sair</a>
                             </form>
                 @else
-                    <a href="{{ route('login') }}" class="menuMargin text-sm underline">Entrar</a>                
+                    <a href="{{ route('login') }}" class="menuMargin text-sm underline">Entrar</a>
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="menuMargin text-sm underline">Cadastrar</a>
                 @endif
@@ -86,7 +82,7 @@
                 <input class="form-control me-2" type="search" name="search" id="search" placeholder="Procure pelo nome do produto" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
-        </div>  
+        </div>
 
 
         <div class="container-fluid">
@@ -160,7 +156,7 @@
                     return actions.order.capture().then(function(orderData) {
                         // Successful capture! For demo purposes:
                         console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                        var transaction = orderData.purchase_units[0].payments.captures[0];
+                        let transaction = orderData.purchase_units[0].payments.captures[0];
                         alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
 
                         // Replace the above to show a success message within this page, e.g.

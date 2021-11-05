@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categorias;
-use App\Models\Produtos;
 
 class CategoriasController extends Controller
 {
@@ -21,6 +19,6 @@ class CategoriasController extends Controller
         return view('produtosCategorias', [
             'categorias'=>$categorias,
         ]);
-        
+
     }
 }
